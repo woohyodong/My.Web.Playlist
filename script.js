@@ -54,7 +54,7 @@ function updateFileList() {
     mediaList.innerHTML = "";
 
     mediaFiles.forEach((file, index) => {
-    console.log(file);
+    //console.log(file);
     const item = document.createElement("li");
     item.className = "media-item";
     item.innerHTML = `
