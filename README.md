@@ -2,4 +2,4 @@
 - 예배시간 - 찬양 컨트롤
 > http://www.jshalom.net/
 > 
-> https://cc.netlify.app/
+> https://jsplaylist.netlify.app/
