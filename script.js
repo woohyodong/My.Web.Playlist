@@ -6,9 +6,9 @@ $(function() {
 const mediaFilesInput = document.getElementById("media-files");
 const mediaList = document.getElementById("media-list");
 const mediaControl = document.getElementById("media-control");
+const addFilesBtn = document.getElementById("add-files");
 let currentPlayer = null;
 let mediaFiles = [];
-const addFilesBtn = document.getElementById("add-files");
 
 mediaFilesInput.onchange = function () {
     addFiles(this.files);
@@ -44,7 +44,7 @@ function playMedia(index) {
 
     if (currentPlayer) {
     currentPlayer.controls = true; // 컨트롤 속성 추가
-    mediaControl.appendChild(currentPlayer); // 현재 플레이어를 문서에 추가
+    mediaControl.appendChild(currentPlayer); // 현재 플레이어 추가
     currentPlayer.play();
     }
 }    
@@ -62,13 +62,20 @@ function updateFileList() {
         <a href="javascript:;" data-index="${index}" class="btn-link danger">[삭제]</a>
         <label>${file.name}</label>
         </section>        
-        <button data-index="${index}" class="btn">Play</button>
+        <section>
+        <button data-index="${index}" class="btn pup ${file.type.startsWith("audio/") ? "none" : ""}">Pop</button>
+        <button data-index="${index}" class="btn play">Play</button>
+        </section>
     `;
     item.querySelector("a.btn-link").onclick = function () {
         removeFile(index);
     };
 
-    item.querySelector("button").onclick = function () {
+    item.querySelector("button.pup").onclick = function () {
+        openFullscreen(index);
+    };    
+
+    item.querySelector("button.play").onclick = function () {
 
         document.querySelectorAll(".media-item").forEach((element) => {
         element.classList.remove("selected");
@@ -108,3 +115,21 @@ document.body.addEventListener("drop", (e) => {
         );
         addFiles(acceptedFiles);
 });
+
+
+let popupWindow = null;
+function openFullscreen(index) {
+
+    let file = mediaFiles[index];
+    let url = URL.createObjectURL(file);
+    let width = 400;
+    let height = 300;
+    let left = (screen.width/2)-(width/2);
+    let top = (screen.height/2)-(height/2);
+    
+    if (popupWindow != null && !popupWindow.closed) popupWindow.window.close();
+
+    popupWindow = window.open("", "newWindow", `width=${width},height=${height},top=${top},left=${left}`);    
+    popupWindow.document.write(`<video controls autoplay src="${url}" style="width: 100%; height: 100%; object-fit: cover;"></video>`);
+    popupWindow.focus();
+}
