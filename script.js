@@ -59,19 +59,17 @@ function updateFileList() {
     item.className = "media-item";
     item.innerHTML = `
         <section>
-        <a href="javascript:;" data-index="${index}" class="btn-link danger">[삭제]</a>
+        <a href="javascript:;" data-index="${index}" class="btn-link danger">✖</a>
         <label>${file.name}</label>
-        </section>        
-        <section>
-        <button data-index="${index}" class="btn pup ${file.type.startsWith("audio/") ? "none" : ""}">Pop</button>
-        <button data-index="${index}" class="btn play">Play</button>
+        <a href="javascript:;" title="Show Video" data-index="${index}" class="btn-link popup ${file.type.startsWith("video/") ? "" : "none"}">🎦</a>
         </section>
+        <button data-index="${index}" class="btn play">Play</button>
     `;
-    item.querySelector("a.btn-link").onclick = function () {
+    item.querySelector("a.btn-link.danger").onclick = function () {
         removeFile(index);
     };
 
-    item.querySelector("button.pup").onclick = function () {
+    item.querySelector("a.btn-link.popup").onclick = function () {
         openFullscreen(index);
     };    
 
