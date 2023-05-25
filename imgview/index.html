@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Image Preview</title>
+    <style>
+        *{margin: 0;padding: 0;}
+        html,body{width:100vw;height:100vh;background: transparent;}
+        .dragover {background-color: rgba(0, 0, 0, 0.1);}
+        .none{display:none;}
+        img{display:inline-block;margin:10px;}
+        #btnFloating{display: block;padding: 1rem;position:fixed;right: 50px; bottom:50px;opacity:0.3;border-radius: 50px;outline: 1px solid; border: none;background: #fff;}
+        #btnFloating:hover{opacity:1}
+    </style>
+</head>
+<body>
+
+<input type="file" id="uploadFile" multiple onchange="handleFiles(this.files);" class="none">
+<button onclick="document.getElementById('uploadFile').click();" id="btnFloating">➕</button>
+<div id="imageGallery"></div>
+
+<script>
+const imageList = document.getElementById("imageGallery");
+
+document.body.addEventListener('dragover', function(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  e.dataTransfer.dropEffect = 'copy';
+  document.body.classList.add("dragover");
+});
+
+document.body.addEventListener('drop', function(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  document.body.classList.remove("dragover");
+  
+  handleFiles(e.dataTransfer.files);
+});
+
+// document.body.addEventListener("dblclick", (e) => {
+//     e.preventDefault();
+//     e.stopPropagation();
+//     document.getElementById('uploadFile').click();
+//     if(imageList.childElementCount < 1) document.getElementById('uploadFile').click();
+// });    
+
+function handleFiles(files) {
+  for (let i = 0; i < files.length; i++) {
+    let file = files[i];
+
+    if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
+      //alert(file.name + " is not an image");
+      continue;
+    } 
+
+    let reader = new FileReader();
+
+    reader.addEventListener("load", function() {
+      let image = new Image();
+      image.width = 200;
+      image.title  = file.name;
+      image.src    = this.result;
+      image.onclick = function() { 
+        let modal = document.createElement("div");
+        modal.style.display = "flex";
+        modal.style.justifyContent = "center";
+        modal.style.alignItems = "center";
+        modal.style.position = "fixed";
+        modal.style.top = "0";
+        modal.style.right = "0";
+        modal.style.bottom = "0";
+        modal.style.left = "0";
+        modal.style.backgroundColor = "rgba(0,0,0,0.5)";
+        modal.onclick = function() { this.remove(); }
+
+        let popupImg = new Image();
+        popupImg.src = image.src;
+        popupImg.style.maxWidth = "90%";
+        popupImg.style.maxHeight = "90%";
+        
+        modal.appendChild(popupImg);
+        document.body.appendChild(modal);
+      }
+      document.getElementById('imageGallery').appendChild(image);
+    });
+    reader.readAsDataURL(file);
+  }
+}
+</script>
+
+</body>
+</html>
