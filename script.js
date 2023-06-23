@@ -3,6 +3,7 @@ $(function() {
     $("#media-list").disableSelection();
 });
 
+const autoplayInput = document.getElementById("chk-auto");
 const mediaFilesInput = document.getElementById("media-files");
 const mediaList = document.getElementById("media-list");
 const mediaControl = document.getElementById("media-control");
@@ -46,6 +47,16 @@ function playMedia(index) {
     currentPlayer.controls = true; // 컨트롤 속성 추가
     mediaControl.appendChild(currentPlayer); // 현재 플레이어 추가
     currentPlayer.play();
+    currentPlayer.addEventListener("ended", (event) => {
+        if(autoplayInput.checked)
+        {
+            var idx = $(".media-item.selected").index();
+            if(idx < $(".media-item").length -1){
+                idx++;
+                $(".media-item").eq(idx).children("button.play").click();
+            }
+        }
+    })
     }
 }    
 

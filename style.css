@@ -15,3 +15,4 @@ header sup{font-weight: normal;opacity: 0.5;}
 .dragover {background-color: rgba(0, 0, 0, 0.1);}
 .selected { background-color: #dfdfdf; font-weight: bold;}
 video{width: 100%;max-height: 50vh;}
+label{opacity: 0.5;}
