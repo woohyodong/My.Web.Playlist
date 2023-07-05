@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -13,6 +13,9 @@
         img{display:inline-block;margin:10px;}
         #btnFloating{display: block;padding: 1rem;position:fixed;right: 50px; bottom:50px;opacity:0.3;border-radius: 50px;outline: 1px solid; border: none;background: #fff;}
         #btnFloating:hover{opacity:1}
+        figure{display:inline-block;text-align:center;}
+        ._flex{flex-direction:column;}
+        ._flex p{color:#fff;}
     </style>
 </head>
 <body>
@@ -58,7 +61,12 @@ function handleFiles(files) {
 
     let reader = new FileReader();
 
-    reader.addEventListener("load", function() {
+      reader.addEventListener("load", function () {
+
+          let figure = document.createElement("figure");
+          let figcaption = document.createElement("figcaption");
+          figcaption.innerText = file.name;
+
       let image = new Image();
       image.width = 200;
       image.title  = file.name;
@@ -72,8 +80,9 @@ function handleFiles(files) {
         modal.style.top = "0";
         modal.style.right = "0";
         modal.style.bottom = "0";
-        modal.style.left = "0";
-        modal.style.backgroundColor = "rgba(0,0,0,0.5)";
+          modal.style.left = "0";
+          modal.classList.add("_flex");
+          modal.style.backgroundColor = "rgba(0,0,0,0.5)";
         modal.onclick = function() { this.remove(); }
 
         let popupImg = new Image();
@@ -81,10 +90,16 @@ function handleFiles(files) {
         popupImg.style.maxWidth = "90%";
         popupImg.style.maxHeight = "90%";
         
-        modal.appendChild(popupImg);
+          modal.appendChild(popupImg);
+          let p = document.createElement("p");
+          p.innerText = file.name;
+          modal.appendChild(p);
         document.body.appendChild(modal);
       }
-      document.getElementById('imageGallery').appendChild(image);
+
+          figure.appendChild(image);
+          figure.appendChild(figcaption);
+          document.getElementById('imageGallery').appendChild(figure);
     });
     reader.readAsDataURL(file);
   }
